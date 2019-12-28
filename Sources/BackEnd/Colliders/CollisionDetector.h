@@ -23,7 +23,12 @@ public:
     void SendCollisionData(PhysicsEntity *first, PhysicsEntity *second);
 
 private:
+    /* Checks if the entity has transform, collider and physics component or not */
     bool isEntityValidForCollisionDetection(PhysicsEntity* entity);
+    /* This function is called after a collision has been detected and it is used to move
+     * the entity back to the safest position directly before collision to prevent entities
+     * stucking due to overlapping. */
+    void moveEntityToSafePosition(PhysicsEntity* entity);
 private:
     PhysicsAspect* mAspect;
 };

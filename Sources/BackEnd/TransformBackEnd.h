@@ -12,12 +12,17 @@ class TransformBackEnd : public Qt3DCore::QBackendNode
 {
 public:
     TransformBackEnd();
-   // This function is called by PhysicsController class to update the translation by the displacement value.
-   void updateTranslation(QVector3D displacement);
-   // Getter for translation
-   QVector3D getTranslation();
+    /* Setter function for translation.This function is called by PhysicsController class
+     * to update the translation after the linear motion calculation step. It also stores
+     * the previous translation value in mPreviousTranslation variable. */
+    void setTranslation(QVector3D translation);
+    // Getter for translation
+    QVector3D getTranslation();
+    /* Getter for previousTranslation. this function will be used to get the safe position for the
+    * entity before collision to prevent entities stuck due to overlapping. */
+    QVector3D getPreviousTranslation();
 private:
-   /* This component implements this function that exist in the base class. When a node is created at the front end
+    /* This component implements this function that exist in the base class. When a node is created at the front end
     * The arbiter takes the data from createNodeCreationChange function and notifies this backend component through this function
     */
     void initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change) override;
@@ -25,6 +30,7 @@ private:
     void notifyTranslationToFrontEnd();
 private:
     QVector3D mTranslation;
+    QVector3D mPreviousTranslation;
     QQuaternion mRotation;
 };
 

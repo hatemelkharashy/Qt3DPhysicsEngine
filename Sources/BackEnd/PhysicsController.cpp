@@ -61,7 +61,9 @@ void PhysicsController::calculateLinearMotion(PhysicsEntity *entity,long long in
     component->setObjectVelocity(newEntityVelocity);
     component->setObjectDisplacement(newEntityDisplacement);
 
-    //Tells the Transform component to update the translation of the entity and notify the front end Transform component
-    transform->updateTranslation(newEntityDisplacement);
+    //Tells the Transform component to update the translation of the entity with the new value.
+    QVector3D entityTranslation = transform->getTranslation();
+    entityTranslation += newEntityDisplacement;
+    transform->setTranslation(entityTranslation);
 
 }

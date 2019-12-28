@@ -24,8 +24,11 @@ void CollisionDetector::detectCollision()
 
             bool areColliding = BoxToBoxColliding(entityIterator1.value(),entityIterator2.value());
 
-            if(areColliding)
+            if(areColliding){
+                moveEntityToSafePosition(entityIterator1.value());
+                moveEntityToSafePosition(entityIterator2.value());
                 mAspect->getPhysicsController()->calculateAfterCollisionData(entityIterator1.value(),entityIterator2.value());
+            }
         }
     }
 }
@@ -95,7 +98,19 @@ bool CollisionDetector::BoxToBoxColliding(PhysicsEntity *first, PhysicsEntity *s
 
 bool CollisionDetector::isEntityValidForCollisionDetection(PhysicsEntity *entity)
 {
-    return (entity->hasTransform()&&entity->hasCollider());
+    return (entity->hasTransform()&&entity->hasCollider()&&entity->hasPhysicsComponent());
+}
+
+void CollisionDetector::moveEntityToSafePosition(PhysicsEntity *entity)
+{
+    //Checks if this entity is physical and can be moved.
+    PhysicsComponentBackEnd* physicsComponent = mAspect->getEntityPhysicsComponent(entity->peerId());
+    if(!physicsComponent->getIsPhysical())
+        return;
+    //This part fetches the transform of entity using the id.
+    TransformBackEnd* transform = mAspect->getEntityTransform(entity->peerId());
+    QVector3D entityPreviousPos = transform->getPreviousTranslation();
+    transform->setTranslation(entityPreviousPos);
 }
 
 

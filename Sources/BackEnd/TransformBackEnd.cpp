@@ -30,15 +30,22 @@ TransformBackEnd::TransformBackEnd()
 
 }
 
-void TransformBackEnd::updateTranslation(QVector3D displacement)
+void TransformBackEnd::setTranslation(QVector3D translation)
 {
-    mTranslation += displacement;
+    mPreviousTranslation = mTranslation;
+    mTranslation = translation;
     notifyTranslationToFrontEnd();
 }
+
 
 QVector3D TransformBackEnd::getTranslation()
 {
     return mTranslation;
+}
+
+QVector3D TransformBackEnd::getPreviousTranslation()
+{
+    return mPreviousTranslation;
 }
 
 void TransformBackEnd::initializeFromPeer(const Qt3DCore::QNodeCreatedChangeBasePtr &change)
